@@ -69,12 +69,20 @@ const galleryRef = document.querySelector('.gallery');
 galleryRef.addEventListener('click', handleGalleryClick);
 
 function handleGalleryClick(event) {
-  if (event.target.nodeName !== 'IMG') {
-    return;
-  }
-
   event.preventDefault();
 
+  if (event.target.nodeName === 'IMG') {
+    const largeImageSrc = event.target.dataset.source;
+
+    const lightboxInstance = basicLightbox.create(`
+      <img src="${largeImageSrc}" width="800" height="600">
+    `);
+
+    lightboxInstance.show();
+  }
+}
+
+// Окремо розмітка галереї
   const imagesMarkup = images
     .map(({ preview, original, description }) => `
   <li class="gallery-item">
@@ -85,7 +93,6 @@ function handleGalleryClick(event) {
     .join('');
 
   galleryRef.insertAdjacentHTML('beforeend', imagesMarkup);
-}
 
 
 
@@ -94,26 +101,3 @@ function handleGalleryClick(event) {
 
 
 
-
-
-/*
-<li class="gallery-item">
-  <a class="gallery-link" href="large-image.jpg">
-    <img
-      class="gallery-image"
-      src="small-image.jpg"
-      data-source="large-image.jpg"
-      alt="Image description"
-    />
-  </a>
-</li>
-*/
-
-/*
-Посилання на велике зображення повинно зберігатися 
-в data-атрибуті source на елементі <img>, і вказуватися в href посилання.
-Зверни увагу на те, що зображення огорнуте посиланням, 
-у якого атрибут href вказує на шлях до файлу з зображенням. 
-Отже клік по ньому може викликати завантаження зображення на компютер користувача. 
-Заборони цю поведінку за замовчуванням.
-*/
